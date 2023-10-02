@@ -3,21 +3,18 @@ const puppeteer = require('puppeteer');
 
 
 async function robo()  {
-  const browser = await puppeteer.launch( {headless: 'new'});
+  const browser = await puppeteer.launch( {headless: false} );
   const page = await browser.newPage();
 
-  const url = 'https://www.google.com.br/'  
-
+  //Abre a pagina
+  const url = 'https://youtube.com';
   await page.goto(url);
-  await page.screenshot({path: 'example.png'});
+
+  await page.type('[aria-label="Pesquisar"]', 'renecrodilo')
+  await page.click('#search-icon-legacy')
   
-  const resultado = await page.evaluate(() => {
-    return document.querySelector('.gLFyf').value
-  })
 
-  console.log(resultado);
-
-  await browser.close();
+  //await browser.close();
 }
 
 robo();
