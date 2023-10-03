@@ -7,10 +7,13 @@ async function robo()  {
   const page = await browser.newPage();
 
   //Abre a pagina
-  const url = 'https://youtube.com';
+  const url = 'https://www.youtube.com/';
   await page.goto(url);
 
-  await page.type('[aria-label="Pesquisar"]', 'renecrodilo')
+  await page.waitForSelector('[aria-label=Pesquisar]')
+  await page.type('[aria-label=Pesquisar]', 'renecrodilo')
+  
+  await page.waitForSelector('#search-icon-legacy')
   await page.click('#search-icon-legacy')
   
 
