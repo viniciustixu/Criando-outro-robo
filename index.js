@@ -13,7 +13,7 @@ async function robo() {
   let ifood = 0
 
   try {
-    await page.waitForSelector(selector, { timeout: 5000 }); // Espera até 5 segundos pelo seletor
+    await page.waitForSelector(selector, { timeout: 5000 });
     console.log(`O seletor ${selector} foi encontrado. Tudo OK`);
 
     // Seleciona o elemento e extrai o texto
