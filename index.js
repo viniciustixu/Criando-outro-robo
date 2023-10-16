@@ -37,27 +37,20 @@ async function robo() {
       if (infoIcon) {
         const textElement = div.querySelector('.chakra-text');
         const priceElement = div.querySelector('.chakra-heading');
-        const ariaControls = infoIcon.getAttribute('aria-controls');
+
   
         if (textElement && priceElement) {
           const textValue = textElement.textContent;
           const precoDoItem = priceElement.textContent;
           const idDoItem = textValue.replace('#', '');
-
-         
-          const regex = /popover-content-(\d+)/;
-          const matches = ariaControls.match(regex);
-          let numeroDepoisDePopoverContent = '';
-          if (matches && matches.length > 1) {
-            numeroDepoisDePopoverContent = parseInt(matches[1], 10); 
-          }
+          const link = `https://openloot.com/items/BT0/Hourglass_Common/issue/${idDoItem}`
 
           // entrar de pagina em pagina usando o idDoItem pra pegar o time remaining
 
           data.push({
             id: idDoItem,
             price: precoDoItem,
-            ariaControls: numeroDepoisDePopoverContent,
+            linkDireto: link,
           });
         }
       }
