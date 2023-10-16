@@ -36,13 +36,14 @@ async function robo() {
     const text = await page.evaluate(el => el.textContent, element);
     const id = await page.evaluate(el => el.parentElement.id, parent);
   
-   // if (text > 0) {
+    if (Number(text) > 0) {
       console.log(text, i);
-   // }
-  
-    //if (id) {
       console.log('ID do elemento pai:', id, i);
-    //}
+    }
+  
+
+      
+
   }
   
   
