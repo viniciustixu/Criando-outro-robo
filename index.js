@@ -8,6 +8,7 @@ async function robo() {
   const url = 'https://openloot.com/items/BT0/Hourglass_Common';
   await page.goto(url);
   await page.waitForNavigation({ waitUntil: 'load' });
+  await page.waitForTimeout(5000);
 
   let LoadMoreSelector = '#__next > div > main > div > div > div > section > div > div.css-1pbv1x7 > div.css-o9757o > div.css-1pobvmq > div.css-ugaqnf > button';
 
@@ -26,22 +27,35 @@ async function robo() {
     console.error(`O botão LoadMore não foi encontrado.`);
   }
 
-  const ampulhetaTempos = await page.$x("//div[@class='css-14hro1a']//p[@class='chakra-text css-6b3ant']");
-  const parentElement = await page.$x("//div[contains(@class, 'css-14hro1a')]");
-  
-  for (let i = 0; i < ampulhetaTempos.length; i++) {
-    const element = ampulhetaTempos[i];
-    const parent = parentElement[i];
-  
-    const text = await page.evaluate(el => el.textContent, element);
-    const id = await page.evaluate(el => el.parentElement.id, parent);
-  
-    if (Number(text) > 0) {
-      console.log(text, i);
-      console.log('ID do elemento pai:', id, i);
-    }
-  }
-  
+  // Execute um código JavaScript personalizado na página para coletar as informações
+  const productData = await page.evaluate(() => {
+    const productDivs = document.querySelectorAll('.css-rj8yxg');
+    const data = [];
+
+    productDivs.forEach(div => {
+      const infoIcon = div.querySelector('img[aria-haspopup="dialog"]');
+      if (infoIcon) {
+        const textElement = div.querySelector('.chakra-text');
+        const priceElement = div.querySelector('.chakra-heading');
+
+        if (textElement && priceElement) {
+          const textValue = textElement.textContent;
+          const priceValue = priceElement.textContent;
+
+          data.push({
+            text: textValue,
+            price: priceValue,
+          });
+        }
+      }
+    });
+
+    return data;
+  });
+
+  // Exibir os resultados
+  console.log(productData);
+
   await browser.close();
 }
 
