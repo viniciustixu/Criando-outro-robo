@@ -1,42 +1,52 @@
 const puppeteer = require('puppeteer');
 
 async function robo() {
-  const browser = await puppeteer.launch({ headless: 'new' });
+  const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
   // Abre a página
-  const url = 'https://www.fractal.is/rewards';
+  const url = 'https://openloot.com/items/BT0/Hourglass_Common';
   await page.goto(url);
 
-  // Pega o elemento
-  const selector = '#__next > div > div > div:nth-child(2) > div > main > div > div > div > div.MuiBox-root.fractal-css-0 > div > div:nth-child(1) > div > div.MuiStack-root.fractal-css-15gdqbd > div.MuiBox-root.fractal-css-i9gxme > div > div.MuiStack-root.fractal-css-1ialerq > p';
-  let ifood = 0
+  let LoadMoreSelector = '#__next > div > main > div > div > div > section > div > div.css-1pbv1x7 > div.css-o9757o > div.css-1pobvmq > div.css-ugaqnf > button';
 
   try {
-    await page.waitForSelector(selector, { timeout: 5000 });
-    console.log(`O seletor ${selector} foi encontrado. Tudo OK`);
+    await page.waitForSelector(LoadMoreSelector, { timeout: 5000 });
+    console.log(`O botão LoadMore foi encontrado. Tudo OK.`);
+    const loadMoreButton = await page.$(LoadMoreSelector);
+    await loadMoreButton.click();
 
-    // Seleciona o elemento e extrai o texto
-    const element = await page.$(selector);
-    const text = await page.evaluate(element => element.textContent, element);
-    let x = text.slice(0,1)
-    let result = Number(x)
-    ifood = result
+    const clickLoadMoreXTimes = 10;
+
+    for (let i = 0; i < clickLoadMoreXTimes; i++) {
+      await loadMoreButton.click();
+      await new Promise(r => setTimeout(r, 1000));
+    }
   } catch (error) {
-    console.error(`O seletor ${selector} não foi encontrado.`);
+    console.error(`O botão LoadMore não foi encontrado.`);
   }
+
+  const ampulhetaTempos = await page.$x("//div[@class='css-14hro1a']//p[@class='chakra-text css-6b3ant']");
+
+  let x = 0
+  for (const element of ampulhetaTempos) {
+    
+    const text = await page.evaluate(el => el.textContent, element);
+    if(text > 0) {
+      console.log(text, x);
+    }
+    x++
+  }
+
+  const parentElement = await page.$x("//div[contains(@class, 'css-14hro1a')]");
+  for(let i = 0; i < parentElement.length; i++) {
   
-  function temIfood() {
-    if (ifood > 0) {
-      console.log('TEM IFOOD, JÁ PODE MUÇA')
-      return true
-    } else {
-      console.log('NÃO TEM IFOOD, NUM PODE MUÇA')
-      return false
+    const id = await page.evaluate(el => el.parentElement.id, parentElement[i]);
+    if (id) {
+      console.log('ID do elemento pai:', id);
     }
   }
-
-  temIfood();
+  
 
   await browser.close();
 }
