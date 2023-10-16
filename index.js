@@ -27,25 +27,24 @@ async function robo() {
   }
 
   const ampulhetaTempos = await page.$x("//div[@class='css-14hro1a']//p[@class='chakra-text css-6b3ant']");
-
-  let x = 0
-  for (const element of ampulhetaTempos) {
-    
-    const text = await page.evaluate(el => el.textContent, element);
-    if(text > 0) {
-      console.log(text, x);
-    }
-    x++
-  }
-
   const parentElement = await page.$x("//div[contains(@class, 'css-14hro1a')]");
-  for(let i = 0; i < parentElement.length; i++) {
   
-    const id = await page.evaluate(el => el.parentElement.id, parentElement[i]);
-    if (id) {
-      console.log('ID do elemento pai:', id);
-    }
+  for (let i = 0; i < ampulhetaTempos.length; i++) {
+    const element = ampulhetaTempos[i];
+    const parent = parentElement[i];
+  
+    const text = await page.evaluate(el => el.textContent, element);
+    const id = await page.evaluate(el => el.parentElement.id, parent);
+  
+   // if (text > 0) {
+      console.log(text, i);
+   // }
+  
+    //if (id) {
+      console.log('ID do elemento pai:', id, i);
+    //}
   }
+  
   
 
   await browser.close();
