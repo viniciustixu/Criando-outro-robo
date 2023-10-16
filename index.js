@@ -52,6 +52,8 @@ async function robo() {
             numeroDepoisDePopoverContent = parseInt(matches[1], 10); 
           }
 
+          // entrar de pagina em pagina usando o idDoItem pra pegar o time remaining
+
           data.push({
             id: idDoItem,
             price: precoDoItem,
