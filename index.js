@@ -37,14 +37,25 @@ async function robo() {
       if (infoIcon) {
         const textElement = div.querySelector('.chakra-text');
         const priceElement = div.querySelector('.chakra-heading');
-
+        const ariaControls = infoIcon.getAttribute('aria-controls');
+  
         if (textElement && priceElement) {
           const textValue = textElement.textContent;
-          const priceValue = priceElement.textContent;
+          const precoDoItem = priceElement.textContent;
+          const idDoItem = textValue.replace('#', '');
+
+          // Use uma expressão regular para extrair apenas os números após "popover-content-"
+          const regex = /popover-content-(\d+)/;
+          const matches = ariaControls.match(regex);
+          let numeroDepoisDePopoverContent = '';
+          if (matches && matches.length > 1) {
+            numeroDepoisDePopoverContent = parseInt(matches[1], 10); // Converta para número inteiro
+          }
 
           data.push({
-            text: textValue,
-            price: priceValue,
+            id: idDoItem,
+            price: precoDoItem,
+            ariaControls: numeroDepoisDePopoverContent,
           });
         }
       }
