@@ -7,6 +7,7 @@ async function robo() {
   // Abre a página
   const url = 'https://openloot.com/items/BT0/Hourglass_Common';
   await page.goto(url);
+  await page.waitForNavigation({ waitUntil: 'load' });
 
   let LoadMoreSelector = '#__next > div > main > div > div > div > section > div > div.css-1pbv1x7 > div.css-o9757o > div.css-1pobvmq > div.css-ugaqnf > button';
 
@@ -14,7 +15,6 @@ async function robo() {
     await page.waitForSelector(LoadMoreSelector, { timeout: 5000 });
     console.log(`O botão LoadMore foi encontrado. Tudo OK.`);
     const loadMoreButton = await page.$(LoadMoreSelector);
-    await loadMoreButton.click();
 
     const clickLoadMoreXTimes = 10;
 
@@ -40,14 +40,8 @@ async function robo() {
       console.log(text, i);
       console.log('ID do elemento pai:', id, i);
     }
-  
-
-      
-
   }
   
-  
-
   await browser.close();
 }
 
