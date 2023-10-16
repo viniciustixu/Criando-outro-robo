@@ -27,7 +27,7 @@ async function robo() {
     console.error(`O botão LoadMore não foi encontrado.`);
   }
 
-  // Execute um código JavaScript personalizado na página para coletar as informações
+
   const productData = await page.evaluate(() => {
     const productDivs = document.querySelectorAll('.css-rj8yxg');
     const data = [];
@@ -44,12 +44,12 @@ async function robo() {
           const precoDoItem = priceElement.textContent;
           const idDoItem = textValue.replace('#', '');
 
-          // Use uma expressão regular para extrair apenas os números após "popover-content-"
+         
           const regex = /popover-content-(\d+)/;
           const matches = ariaControls.match(regex);
           let numeroDepoisDePopoverContent = '';
           if (matches && matches.length > 1) {
-            numeroDepoisDePopoverContent = parseInt(matches[1], 10); // Converta para número inteiro
+            numeroDepoisDePopoverContent = parseInt(matches[1], 10); 
           }
 
           data.push({
@@ -64,7 +64,6 @@ async function robo() {
     return data;
   });
 
-  // Exibir os resultados
   console.log(productData);
 
   await browser.close();
