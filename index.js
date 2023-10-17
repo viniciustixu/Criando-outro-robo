@@ -89,3 +89,11 @@ await fs.writeFile('index.html', htmlTable);
   await browser.close();
 }
 robo();
+
+
+/* =================================================================
+node index.js
+Arrumar index.js (voltar o href="melhores")
+copiar index.html
+node conversor.js
+*/
