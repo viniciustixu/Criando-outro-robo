@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const ExcelJS = require('exceljs');
 
 async function robo() {
   const browser = await puppeteer.launch({ headless: false });
@@ -17,7 +18,7 @@ async function robo() {
     console.log(`O botão LoadMore foi encontrado. Tudo OK.`);
     const loadMoreButton = await page.$(LoadMoreSelector);
 
-    const clickLoadMoreXTimes = 30;
+    const clickLoadMoreXTimes = 20;
 
     for (let i = 0; i < clickLoadMoreXTimes; i++) {
       await loadMoreButton.click();
@@ -58,7 +59,7 @@ async function robo() {
         // Fechar a nova aba somente após obter o valor
         await newPage.close();
 
-        if (tempo !== '0.00') { // Adicione esta verificação
+        if (tempo !== '0.00') {
           productData.push({
             id: idDoItem,
             price: precoDoItem,
@@ -73,7 +74,22 @@ async function robo() {
   // Ordenar a lista por ordem crescente de "tempo"
   productData.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
 
-  console.log(productData);
+  // Criar uma planilha Excel
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Produtos');
+
+  // Adicionar cabeçalhos
+  worksheet.addRow(['ID', 'Preço', 'Link', 'Tempo']);
+
+  // Adicionar os dados à planilha
+  productData.forEach((product) => {
+    worksheet.addRow([product.id, product.price, product.link, product.time]);
+  });
+
+  // Salvar a planilha em um arquivo
+  await workbook.xlsx.writeFile('produtos.xlsx');
+
+  console.log('Planilha Excel criada com sucesso.');
 
   await browser.close();
 }
