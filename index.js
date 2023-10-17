@@ -17,7 +17,7 @@ async function robo() {
     console.log(`O botão LoadMore foi encontrado. Tudo OK.`);
     const loadMoreButton = await page.$(LoadMoreSelector);
 
-    const clickLoadMoreXTimes = 10;
+    const clickLoadMoreXTimes = 5;
 
     for (let i = 0; i < clickLoadMoreXTimes; i++) {
       await loadMoreButton.click();
@@ -58,12 +58,14 @@ async function robo() {
         // Fechar a nova aba somente após obter o valor
         await newPage.close();
 
-        productData.push({
-          id: idDoItem,
-          price: precoDoItem,
-          link: link,
-          time: tempo,
-        });
+        if (tempo !== '0.00') { // Adicione esta verificação
+          productData.push({
+            id: idDoItem,
+            price: precoDoItem,
+            link: link,
+            time: tempo,
+          });
+        }
       }
     }
   }
