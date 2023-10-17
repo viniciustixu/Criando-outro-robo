@@ -17,7 +17,7 @@ async function robo() {
     console.log(`O botão LoadMore foi encontrado. Tudo OK.`);
     const loadMoreButton = await page.$(LoadMoreSelector);
 
-    const clickLoadMoreXTimes = 30; // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    const clickLoadMoreXTimes = 40; // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
     for (let i = 0; i < clickLoadMoreXTimes; i++) {
