@@ -17,7 +17,7 @@ async function robo() {
     console.log(`O botão LoadMore foi encontrado. Tudo OK.`);
     const loadMoreButton = await page.$(LoadMoreSelector);
 
-    const clickLoadMoreXTimes = 5;
+    const clickLoadMoreXTimes = 30;
 
     for (let i = 0; i < clickLoadMoreXTimes; i++) {
       await loadMoreButton.click();
@@ -69,6 +69,9 @@ async function robo() {
       }
     }
   }
+
+  // Ordenar a lista por ordem crescente de "tempo"
+  productData.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
 
   console.log(productData);
 
