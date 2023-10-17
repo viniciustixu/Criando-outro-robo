@@ -1,24 +1,20 @@
 const puppeteer = require('puppeteer');
-const ExcelJS = require('exceljs');
-
 async function robo() {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
-
   // Abre a página
   const url = 'https://openloot.com/items/BT0/Hourglass_Common';
   await page.goto(url);
   await page.waitForNavigation({ waitUntil: 'load' });
   await page.waitForTimeout(5000);
-
   const LoadMoreSelector = '#__next > div > main > div > div > div > section > div > div.css-1pbv1x7 > div.css-o9757o > div.css-1pobvmq > div.css-ugaqnf > button';
-
   try {
     await page.waitForSelector(LoadMoreSelector, { timeout: 5000 });
     console.log(`O botão LoadMore foi encontrado. Tudo OK.`);
     const loadMoreButton = await page.$(LoadMoreSelector);
 
-    const clickLoadMoreXTimes = 20;
+    const clickLoadMoreXTimes = 5;
+
 
     for (let i = 0; i < clickLoadMoreXTimes; i++) {
       await loadMoreButton.click();
@@ -27,26 +23,21 @@ async function robo() {
   } catch (error) {
     console.error(`O botão LoadMore não foi encontrado.`);
   }
-
   const productData = [];
   const productDivs = await page.$$('.css-rj8yxg');
-
   for (const div of productDivs) {
     const infoIcon = await div.$('img[aria-haspopup="dialog"]');
     if (infoIcon) {
       const textElement = await div.$('.chakra-text');
       const priceElement = await div.$('.chakra-heading');
-
       if (textElement && priceElement) {
         const textValue = await textElement.evaluate(el => el.textContent);
         const precoDoItem = await priceElement.evaluate(el => el.textContent);
         const idDoItem = textValue.replace('#', '');
         const link = `https://openloot.com/items/BT0/Hourglass_Common/issue/${idDoItem}`;
-
         // Abrir uma nova aba
         const newPage = await browser.newPage();
         await newPage.goto(link);
-
         // Inserir código para obter o valor numérico abaixo de "TimeRemaining"
         const tempo = await newPage.evaluate(() => {
           const timeRemainingElement = document.querySelector("#__next > div > main > div > div > div > section > div > div.css-pckl1t > div.css-1nlrkd1 > div.chakra-stack.css-1yq6kto > div.css-12n3wqh > div > div > p.chakra-text.css-10ycfue");
@@ -55,11 +46,9 @@ async function robo() {
           }
           return '';
         });
-
         // Fechar a nova aba somente após obter o valor
         await newPage.close();
-
-        if (tempo !== '0.00') {
+        if (tempo !== '0.00') { // Adicione esta verificação
           productData.push({
             id: idDoItem,
             price: precoDoItem,
@@ -74,24 +63,8 @@ async function robo() {
   // Ordenar a lista por ordem crescente de "tempo"
   productData.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
 
-  // Criar uma planilha Excel
-  const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet('Produtos');
-
-  // Adicionar cabeçalhos
-  worksheet.addRow(['ID', 'Preço', 'Link', 'Tempo']);
-
-  // Adicionar os dados à planilha
-  productData.forEach((product) => {
-    worksheet.addRow([product.id, product.price, product.link, product.time]);
-  });
-
-  // Salvar a planilha em um arquivo
-  await workbook.xlsx.writeFile('produtos.xlsx');
-
-  console.log('Planilha Excel criada com sucesso.');
+  console.log(productData);
 
   await browser.close();
 }
-
 robo();
