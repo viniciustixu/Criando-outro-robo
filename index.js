@@ -40,10 +40,10 @@ async function robo() {
         const precoDoItem = await priceElement.evaluate(el => el.textContent);
         const idDoItem = textValue.replace('#', '');
         const link = `https://openloot.com/items/BT0/Hourglass_Common/issue/${idDoItem}`;
-        // Abrir uma nova aba
+        
         const newPage = await browser.newPage();
         await newPage.goto(link);
-        // Inserir código para obter o valor numérico abaixo de "TimeRemaining"
+        
         const tempo = await newPage.evaluate(() => {
           const timeRemainingElement = document.querySelector("#__next > div > main > div > div > div > section > div > div.css-pckl1t > div.css-1nlrkd1 > div.chakra-stack.css-1yq6kto > div.css-12n3wqh > div > div > p.chakra-text.css-10ycfue");
           if (timeRemainingElement) {
@@ -51,9 +51,9 @@ async function robo() {
           }
           return '';
         });
-        // Fechar a nova aba somente após obter o valor
+        
         await newPage.close();
-        if (tempo !== '0.00') { // Adicione esta verificação
+        if (tempo !== '0.00') { 
           productData.push({
             id: idDoItem,
             price: precoDoItem,
@@ -65,10 +65,10 @@ async function robo() {
     }
   }
 
-  // Ordenar a lista por ordem crescente de "tempo"
+  
   productData.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
 
-  // Crie uma string HTML com os dados
+
 let htmlTable = '<table>';
 htmlTable += '<thead><tr><th>ID</th><th>Preço</th><th>Link</th><th>Tempo</th></tr></thead>';
 htmlTable += '<tbody>';
@@ -79,7 +79,7 @@ productData.forEach((product) => {
 
 htmlTable += '</tbody></table>';
 
-// Escreva a tabela HTML no arquivo index.html
+// Escreve a tabela HTML no arquivo index.html
 await fs.writeFile('index.html', htmlTable);
 
 
