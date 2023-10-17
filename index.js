@@ -10,14 +10,14 @@ async function robo() {
   await page.waitForNavigation({ waitUntil: 'load' });
   await page.waitForTimeout(5000);
 
-  let LoadMoreSelector = '#__next > div > main > div > div > div > section > div > div.css-1pbv1x7 > div.css-o9757o > div.css-1pobvmq > div.css-ugaqnf > button';
+  const LoadMoreSelector = '#__next > div > main > div > div > div > section > div > div.css-1pbv1x7 > div.css-o9757o > div.css-1pobvmq > div.css-ugaqnf > button';
 
   try {
     await page.waitForSelector(LoadMoreSelector, { timeout: 5000 });
     console.log(`O botão LoadMore foi encontrado. Tudo OK.`);
     const loadMoreButton = await page.$(LoadMoreSelector);
 
-    const clickLoadMoreXTimes = 10;
+    const clickLoadMoreXTimes = 5;
 
     for (let i = 0; i < clickLoadMoreXTimes; i++) {
       await loadMoreButton.click();
@@ -27,37 +27,46 @@ async function robo() {
     console.error(`O botão LoadMore não foi encontrado.`);
   }
 
+  const productData = [];
+  const productDivs = await page.$$('.css-rj8yxg');
 
-  const productData = await page.evaluate(() => {
-    const productDivs = document.querySelectorAll('.css-rj8yxg');
-    const data = [];
+  for (const div of productDivs) {
+    const infoIcon = await div.$('img[aria-haspopup="dialog"]');
+    if (infoIcon) {
+      const textElement = await div.$('.chakra-text');
+      const priceElement = await div.$('.chakra-heading');
 
-    productDivs.forEach(div => {
-      const infoIcon = div.querySelector('img[aria-haspopup="dialog"]');
-      if (infoIcon) {
-        const textElement = div.querySelector('.chakra-text');
-        const priceElement = div.querySelector('.chakra-heading');
+      if (textElement && priceElement) {
+        const textValue = await textElement.evaluate(el => el.textContent);
+        const precoDoItem = await priceElement.evaluate(el => el.textContent);
+        const idDoItem = textValue.replace('#', '');
+        const link = `https://openloot.com/items/BT0/Hourglass_Common/issue/${idDoItem}`;
 
-  
-        if (textElement && priceElement) {
-          const textValue = textElement.textContent;
-          const precoDoItem = priceElement.textContent;
-          const idDoItem = textValue.replace('#', '');
-          const link = `https://openloot.com/items/BT0/Hourglass_Common/issue/${idDoItem}`
+        // Abrir uma nova aba
+        const newPage = await browser.newPage();
+        await newPage.goto(link);
 
-          // entrar de pagina em pagina usando o idDoItem pra pegar o time remaining
+        // Inserir código para obter o valor numérico abaixo de "TimeRemaining"
+        const tempo = await newPage.evaluate(() => {
+          const timeRemainingElement = document.querySelector("#__next > div > main > div > div > div > section > div > div.css-pckl1t > div.css-1nlrkd1 > div.chakra-stack.css-1yq6kto > div.css-12n3wqh > div > div > p.chakra-text.css-10ycfue");
+          if (timeRemainingElement) {
+            return timeRemainingElement.textContent;
+          }
+          return '';
+        });
 
-          data.push({
-            id: idDoItem,
-            price: precoDoItem,
-            linkDireto: link,
-          });
-        }
+        // Fechar a nova aba somente após obter o valor
+        await newPage.close();
+
+        productData.push({
+          id: idDoItem,
+          price: precoDoItem,
+          linkDireto: link,
+          tempo: tempo,
+        });
       }
-    });
-
-    return data;
-  });
+    }
+  }
 
   console.log(productData);
 
