@@ -29,8 +29,9 @@ function ordenarPorMelhorPrecoPorMinuto(dadosStr) {
 
   // Ordenar os dados com base no valor por minuto em ordem crescente
   dados.sort(function (a, b) {
-    return a[3] - b[3];
+    return a[3].toString().localeCompare(b[3].toString());
   });
+  
 
   // Gere o HTML com os dados ordenados
   const html = gerarHTML(dados);
