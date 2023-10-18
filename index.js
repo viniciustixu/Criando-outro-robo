@@ -28,6 +28,8 @@ async function robo() {
     console.error(`O botão LoadMore não foi encontrado.`, error);
   }
 
+  await page.close();
+
   const productData = [];
   const productDivs = await page.$$('.css-rj8yxg');
   for (const div of productDivs) {
