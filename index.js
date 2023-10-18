@@ -29,6 +29,22 @@ async function robo() {
   }
 
 
+  try {
+    // Encontre o seletor do body
+    const bodySelector = 'body';
+  
+    await page.waitForSelector(bodySelector, { timeout: 4000 });
+    const bodyElement = await page.$(bodySelector);
+  
+    // Defina o estilo display: none no body
+    await page.evaluate((bodyElement) => {
+      bodyElement.style.display = 'none';
+    }, bodyElement);
+  } catch (error) {
+    console.error(`Erro ao ocultar o body.`, error);
+  }
+  
+
   const productData = [];
   const productDivs = await page.$$('.css-rj8yxg');
   for (const div of productDivs) {
