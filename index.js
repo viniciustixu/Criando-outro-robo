@@ -45,7 +45,7 @@ async function scrapeTimeRemaining(browser, productData, poolSize) {
   for (const chunk of chunks) {
     const promises = chunk.map(async (product) => {
       const link = `https://openloot.com/items/BT0/Hourglass_Common/issue/${product.id}`;
-      const newPage = await browser.newPage(); // Correção aqui
+      const newPage = await browser.newPage();
       await newPage.goto(link);
       const tempo = await newPage.evaluate(() => {
         const timeRemainingElement = document.querySelector("#__next > div > main > div > div > div > section > div > div.css-pckl1t > div.css-1nlrkd1 > div.chakra-stack.css-1yq6kto > div.css-12n3wqh > div > div > p.chakra-text.css-10ycfue");
@@ -77,7 +77,6 @@ function chunkArray(array, chunkSize) {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
-  // Primeira parte
   const LoadMoreSelector = '#__next > div > main > div > div > div > section > div > div.css-1pbv1x7 > div.css-o9757o > div.css-1pobvmq > div.css-ugaqnf > button';
   await page.goto('https://openloot.com/items/BT0/Hourglass_Common');
   await page.waitForNavigation({ waitUntil: 'load' });
@@ -105,7 +104,6 @@ function chunkArray(array, chunkSize) {
 
   htmlTable += '</tbody></table>';
 
-  // Escreve a tabela HTML no arquivo index.html
   const fs = require('fs').promises;
   await fs.writeFile('index.html', htmlTable);
 
