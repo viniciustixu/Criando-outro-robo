@@ -29,10 +29,12 @@ async function scrapeProductData(page) {
         if (priceElement) {
           const precoDoItem = await priceElement.evaluate(el => el.textContent);
           const idDoItem = textValue.replace('#', '');
-          productData.push({
-            id: idDoItem,
-            price: precoDoItem,
-          });
+          if (!precoDoItem.includes(',')) { // Verifica se o preço não contém vírgula
+            productData.push({
+              id: idDoItem,
+              price: precoDoItem,
+            });
+          }
         }
       }
     }
@@ -79,14 +81,14 @@ async function main() {
   const browser = await puppeteer.launch({ headless: false });
   const poolSize = 10;
 
-  for (let i = 0; i < 1; i++) { // Loop para dizer quantas vezes rodar o bot
+  for (let i = 0; i < 1; i++) { // Loop que define quantas vezes o codigo vai rodar
     const page = await browser.newPage();
 
     const LoadMoreSelector = '#__next > div > main > div > div > div > section > div > div.css-1pbv1x7 > div.css-o9757o > div.css-1pobvmq > div.css-ugaqnf > button';
     await page.goto('https://openloot.com/items/BT0/Hourglass_Common');
     await page.waitForNavigation({ waitUntil: 'load' });
     await page.waitForTimeout(5000);
-    await clickLoadMore(page, LoadMoreSelector, 100); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    await clickLoadMore(page, LoadMoreSelector, 100); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     const productData = await scrapeProductData(page);
     await page.close();
