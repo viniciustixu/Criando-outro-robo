@@ -1,17 +1,14 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const simpleGit = require('simple-git');
 
 async function clickLoadMore(page, selector, times) {
-  try {
-    await page.waitForSelector(selector, { timeout: 4000 });
-    const loadMoreButton = await page.$(selector);
+  await page.waitForSelector(selector, { timeout: 4000 });
+  const loadMoreButton = await page.$(selector);
 
-    for (let i = 0; i < times; i++) {
-      await loadMoreButton.click();
-      await page.waitForTimeout(2000);
-    }
-  } catch (error) {
-    console.error('O botão LoadMore não foi encontrado.', error);
+  for (let i = 0; i < times; i++) {
+    await loadMoreButton.click();
+    await page.waitForTimeout(2000);
   }
 }
 
@@ -80,7 +77,6 @@ function chunkArray(array, chunkSize) {
 async function addLastUpdateToHTML(html) {
   const currentTime = new Date();
   const formattedTimeUTC = `${currentTime.getUTCHours()}:${currentTime.getUTCMinutes()} (UTC)`;
-
   return html.replace('<body>', `<body><p>Last update: ${formattedTimeUTC}</p>`);
 }
 
@@ -94,7 +90,7 @@ async function main() {
     await page.goto('https://openloot.com/items/BT0/Hourglass_Common');
     await page.waitForNavigation({ waitUntil: 'load' });
     await page.waitForTimeout(5000);
-    await clickLoadMore(page, LoadMoreSelector, 100); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    await clickLoadMore(page, LoadMoreSelector, 5);
 
     const productData = await scrapeProductData(page);
     await scrapeTimeRemaining(browser, productData, poolSize);
@@ -106,6 +102,11 @@ async function main() {
     const html = ordenarPorMelhorPrecoPorMinuto(dadosStr);
 
     const updatedHTML = await addLastUpdateToHTML(html);
+
+    const git = simpleGit();
+    await git.add('.');
+    await git.commit('Atualização automática da lista');
+    await git.push('origin', 'master');
 
     fs.writeFileSync('melhores.html', updatedHTML);
   } catch (error) {
@@ -177,7 +178,15 @@ function gerarHTML(dados) {
   return html;
 }
 
-// Loop para executar o código X vezes
-for (let i = 0; i < 1; i++) {
-  main();
+async function runScript() {
+  for (let i = 0; i < 1; i++) {
+    await main();
+  }
+
+  const git = simpleGit();
+  await git.add('.');
+  await git.commit('Atualização automática da lista');
+  await git.push('origin', 'master');
 }
+
+runScript();
