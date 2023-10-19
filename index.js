@@ -41,6 +41,7 @@ async function scrapeProductData(page, browser) {
           const idDoItem = textValue.replace('#', '');
           const link = `https://openloot.com/items/BT0/Hourglass_Common/issue/${idDoItem}`;
 
+          // Mova a parte de abrir a nova página e extrair informações para dentro do loop para evitar elementos desconectados.
           const newPage = await browser.newPage();
           await newPage.goto(link);
 
@@ -66,10 +67,9 @@ async function scrapeProductData(page, browser) {
     }));
   }
 
-
-
   return productData;
 }
+
 
 (async () => {
   const browser = await puppeteer.launch({ headless: false });
