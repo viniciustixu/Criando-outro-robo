@@ -81,7 +81,7 @@ function chunkArray(array, chunkSize) {
   await page.goto('https://openloot.com/items/BT0/Hourglass_Common');
   await page.waitForNavigation({ waitUntil: 'load' });
   await page.waitForTimeout(5000);
-  await clickLoadMore(page, LoadMoreSelector, 50); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  await clickLoadMore(page, LoadMoreSelector, 100); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
   const productData = await scrapeProductData(page);
 
