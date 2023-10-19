@@ -1,9 +1,9 @@
 const puppeteer = require('puppeteer');
+const fs = require('fs');
 
 async function clickLoadMore(page, selector, times) {
   try {
     await page.waitForSelector(selector, { timeout: 4000 });
-    console.log(`O botão LoadMore foi encontrado. Tudo OK.`);
     const loadMoreButton = await page.$(selector);
 
     for (let i = 0; i < times; i++) {
@@ -11,7 +11,7 @@ async function clickLoadMore(page, selector, times) {
       await page.waitForTimeout(2000);
     }
   } catch (error) {
-    console.error(`O botão LoadMore não foi encontrado.`, error);
+    console.error('O botão LoadMore não foi encontrado.', error);
   }
 }
 
@@ -23,15 +23,17 @@ async function scrapeProductData(page) {
     const infoIcon = await div.$('img[aria-haspopup="dialog"]');
     if (infoIcon) {
       const textElement = await div.$('.chakra-text');
-      const priceElement = await div.$('.chakra-heading');
-      if (textElement && priceElement) {
+      if (textElement) {
         const textValue = await textElement.evaluate(el => el.textContent);
-        const precoDoItem = await priceElement.evaluate(el => el.textContent);
-        const idDoItem = textValue.replace('#', '');
-        productData.push({
-          id: idDoItem,
-          price: precoDoItem,
-        });
+        const priceElement = await div.$('.chakra-heading');
+        if (priceElement) {
+          const precoDoItem = await priceElement.evaluate(el => el.textContent);
+          const idDoItem = textValue.replace('#', '');
+          productData.push({
+            id: idDoItem,
+            price: precoDoItem,
+          });
+        }
       }
     }
   }
@@ -73,41 +75,97 @@ function chunkArray(array, chunkSize) {
   return chunks;
 }
 
-(async () => {
+async function main() {
   const browser = await puppeteer.launch({ headless: false });
-  const page = await browser.newPage();
+  const poolSize = 10;
 
-  const LoadMoreSelector = '#__next > div > main > div > div > div > section > div > div.css-1pbv1x7 > div.css-o9757o > div.css-1pobvmq > div.css-ugaqnf > button';
-  await page.goto('https://openloot.com/items/BT0/Hourglass_Common');
-  await page.waitForNavigation({ waitUntil: 'load' });
-  await page.waitForTimeout(5000);
-  await clickLoadMore(page, LoadMoreSelector, 100); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  for (let i = 0; i < 1; i++) { // Loop para dizer quantas vezes rodar o bot
+    const page = await browser.newPage();
 
-  const productData = await scrapeProductData(page);
+    const LoadMoreSelector = '#__next > div > main > div > div > div > section > div > div.css-1pbv1x7 > div.css-o9757o > div.css-1pobvmq > div.css-ugaqnf > button';
+    await page.goto('https://openloot.com/items/BT0/Hourglass_Common');
+    await page.waitForNavigation({ waitUntil: 'load' });
+    await page.waitForTimeout(5000);
+    await clickLoadMore(page, LoadMoreSelector, 100); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-  await page.close();
+    const productData = await scrapeProductData(page);
+    await page.close();
 
-  const poolSize = 10; 
-  await scrapeTimeRemaining(browser, productData, poolSize);
+    await scrapeTimeRemaining(browser, productData, poolSize);
 
-  const filteredProductData = productData.filter((product) => product.time && product.time !== '0.00');
+    const filteredProductData = productData.filter((product) => product.price && product.time && product.time !== '0.00');
+    filteredProductData.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
 
-  filteredProductData.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
+    const dadosStr = filteredProductData.map((product) => `${product.id}\t${product.price}\tLink\t${product.time}`).join('\n');
 
-  let htmlTable = '<table>';
-  htmlTable += '<thead><tr><th>ID</th><th>Preço</th><th>Link</th><th>Tempo</th></tr></thead>';
-  htmlTable += '<tbody>';
-
-  filteredProductData.forEach((product) => {
-    htmlTable += `<tr><td>${product.id}</td><td>${product.price}</td><td><a href="https://openloot.com/items/BT0/Hourglass_Common/issue/${product.id}" target="_blank">Link</a></td><td>${product.time}</td></tr>`;
-  });
-
-  htmlTable += '</tbody></table>';
-
-  const fs = require('fs').promises;
-  await fs.writeFile('index.html', htmlTable);
-
-  console.log(filteredProductData);
+    ordenarPorMelhorPrecoPorMinuto(dadosStr);
+  }
 
   await browser.close();
-})();
+}
+
+function ordenarPorMelhorPrecoPorMinuto(dadosStr) {
+  const linhas = dadosStr.split('\n');
+  const dados = [];
+
+  linhas.forEach(function (linha) {
+    const partes = linha.split('\t');
+    if (partes.length === 4) {
+      const id = parseInt(partes[0]);
+      const precoStr = partes[1];
+      const tempoStr = partes[3];
+
+      const preco = parseFloat(precoStr.replace('$', '').trim());
+      const tempo = parseFloat(tempoStr.trim());
+      const valorPorMinuto = preco / tempo;
+      dados.push([id, preco, tempo, valorPorMinuto]);
+    }
+  });
+
+  dados.sort(function (a, b) {
+    return a[3].toString().localeCompare(b[3].toString());
+  });
+
+  const html = gerarHTML(dados);
+
+  fs.writeFileSync('melhores.html', html);
+  console.log('Arquivo "melhores.html" gerado com sucesso.');
+}
+
+function gerarHTML(dados) {
+  let html = `
+    <html>
+      <head>
+        <title>Dados Ordenados</title>
+      </head>
+      <body>
+        <h1>Dados Ordenados por Melhor Preço por Minuto</h1>
+        <table>
+          <tr>
+            <th>ID</th>
+            <th>Preço</th>
+            <th>Tempo</th>
+            <th>Valor por Minuto</th>
+          </tr>`;
+
+  dados.forEach(function (entrada) {
+    const link = `https://openloot.com/items/BT0/Hourglass_Common/issue/${entrada[0]}`;
+
+    html += `
+          <tr>
+            <td><a href="${link}" target="_blank">${entrada[0]}</a></td>
+            <td>${entrada[1]}</td>
+            <td>${entrada[2]}</td>
+            <td>${entrada[3]}</td>
+          </tr>`;
+  });
+
+  html += `
+        </table>
+      </body>
+    </html>`;
+
+  return html;
+}
+
+main();
