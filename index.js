@@ -29,7 +29,7 @@ async function scrapeProductData(page) {
         if (priceElement) {
           const precoDoItem = await priceElement.evaluate(el => el.textContent);
           const idDoItem = textValue.replace('#', '');
-          if (!precoDoItem.includes(',')) { // Verifica se o preço não contém vírgula
+          if (!precoDoItem.includes(',')) {
             productData.push({
               id: idDoItem,
               price: precoDoItem,
@@ -77,33 +77,42 @@ function chunkArray(array, chunkSize) {
   return chunks;
 }
 
+async function addLastUpdateToHTML(html) {
+  const currentTime = new Date();
+  const formattedTimeUTC = `${currentTime.getUTCHours()}:${currentTime.getUTCMinutes()} (UTC)`;
+
+  return html.replace('<body>', `<body><p>Last update: ${formattedTimeUTC}</p>`);
+}
+
 async function main() {
   const browser = await puppeteer.launch({ headless: false });
   const poolSize = 10;
+  const page = await browser.newPage();
 
-  for (let i = 0; i < 1; i++) { // Loop que define quantas vezes o codigo vai rodar
-    const page = await browser.newPage();
-
+  try {
     const LoadMoreSelector = '#__next > div > main > div > div > div > section > div > div.css-1pbv1x7 > div.css-o9757o > div.css-1pobvmq > div.css-ugaqnf > button';
     await page.goto('https://openloot.com/items/BT0/Hourglass_Common');
     await page.waitForNavigation({ waitUntil: 'load' });
     await page.waitForTimeout(5000);
-    await clickLoadMore(page, LoadMoreSelector, 100); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    await clickLoadMore(page, LoadMoreSelector, 100); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     const productData = await scrapeProductData(page);
-    await page.close();
-
     await scrapeTimeRemaining(browser, productData, poolSize);
 
     const filteredProductData = productData.filter((product) => product.price && product.time && product.time !== '0.00');
     filteredProductData.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
 
     const dadosStr = filteredProductData.map((product) => `${product.id}\t${product.price}\tLink\t${product.time}`).join('\n');
+    const html = ordenarPorMelhorPrecoPorMinuto(dadosStr);
 
-    ordenarPorMelhorPrecoPorMinuto(dadosStr);
+    const updatedHTML = await addLastUpdateToHTML(html);
+
+    fs.writeFileSync('melhores.html', updatedHTML);
+  } catch (error) {
+    console.error('Ocorreu um erro durante a execução:', error);
+  } finally {
+    await browser.close();
   }
-
-  await browser.close();
 }
 
 function ordenarPorMelhorPrecoPorMinuto(dadosStr) {
@@ -129,9 +138,7 @@ function ordenarPorMelhorPrecoPorMinuto(dadosStr) {
   });
 
   const html = gerarHTML(dados);
-
-  fs.writeFileSync('melhores.html', html);
-  console.log('Arquivo "melhores.html" gerado com sucesso.');
+  return html;
 }
 
 function gerarHTML(dados) {
@@ -170,4 +177,7 @@ function gerarHTML(dados) {
   return html;
 }
 
-main();
+// Loop para executar o código X vezes
+for (let i = 0; i < 1; i++) {
+  main();
+}
