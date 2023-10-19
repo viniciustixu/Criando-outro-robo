@@ -15,15 +15,18 @@ function ordenarPorMelhorPrecoPorMinuto(dadosStr) {
       const precoStr = partes[1];
       const tempoStr = partes[3];
 
-      // Extrair o preço e o tempo como números
-      const preco = parseFloat(precoStr.replace('$', '').trim());
-      const tempo = parseFloat(tempoStr.trim());
+      // Verificar se o preço contém vírgula
+      if (!precoStr.includes(',')) {
+        // Extrair o preço e o tempo como números
+        const preco = parseFloat(precoStr.replace('$', '').trim());
+        const tempo = parseFloat(tempoStr.trim());
 
-      // Calcular o preço por minuto
-      const valorPorMinuto = preco / tempo;
+        // Calcular o preço por minuto
+        const valorPorMinuto = preco / tempo;
 
-      // Adicionar os dados formatados à matriz com o ID
-      dados.push([id, preco, tempo, valorPorMinuto]);
+        // Adicionar os dados formatados à matriz com o ID
+        dados.push([id, preco, tempo, valorPorMinuto]);
+      }
     }
   });
 
@@ -31,7 +34,6 @@ function ordenarPorMelhorPrecoPorMinuto(dadosStr) {
   dados.sort(function (a, b) {
     return a[3].toString().localeCompare(b[3].toString());
   });
-  
 
   // Gere o HTML com os dados ordenados
   const html = gerarHTML(dados);
@@ -81,6 +83,8 @@ function gerarHTML(dados) {
 }
 
 const dadosStr = `
+
+
 
 
 
@@ -702,12 +706,13 @@ const dadosStr = `
 223442	$ 150	Link	5760
 476772	$ 186	Link	7200
 214157	$ 248	Link	7920
+177659	$ 1,000	Link	7920
 
 
 
 
 
-`; // Substitua pelos seus próprios dados de exemplo
+`;
 
 // Chama a função de ordenação e geração do arquivo HTML
 ordenarPorMelhorPrecoPorMinuto(dadosStr);
