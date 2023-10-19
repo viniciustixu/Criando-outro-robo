@@ -8,7 +8,7 @@ async function clickLoadMore(page, selector, times) {
 
     for (let i = 0; i < times; i++) {
       await loadMoreButton.click();
-      await page.waitForTimeout(1000);
+      await page.waitForTimeout(2000);
     }
   } catch (error) {
     console.error(`O botão LoadMore não foi encontrado.`, error);
@@ -90,7 +90,7 @@ async function scrapeProductData(page, browser) {
   await page.goto('https://openloot.com/items/BT0/Hourglass_Common');
   await page.waitForNavigation({ waitUntil: 'load' });
   await page.waitForTimeout(5000);
-  await clickLoadMore(page, LoadMoreSelector, 70); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  await clickLoadMore(page, LoadMoreSelector, 100); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
   // Segunda parte
   const bodySelector = 'body';
