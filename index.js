@@ -15,17 +15,7 @@ async function clickLoadMore(page, selector, times) {
   }
 }
 
-async function hideBody(page, selector) {
-  try {
-    await page.waitForSelector(selector, { timeout: 4000 });
-    const bodyElement = await page.$(selector);
-    await page.evaluate((bodyElement) => {
-      bodyElement.style.display = 'none';
-    }, bodyElement);
-  } catch (error) {
-    console.error(`Erro ao ocultar o body.`, error);
-  }
-}
+
 
 async function scrapeProductData(page, browser) {
   const productData = [];
@@ -92,9 +82,7 @@ async function scrapeProductData(page, browser) {
   await page.waitForTimeout(5000);
   await clickLoadMore(page, LoadMoreSelector, 100); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-  // Segunda parte
-  const bodySelector = 'body';
-  await hideBody(page, bodySelector);
+
 
   const productData = await scrapeProductData(page, browser); // Passe 'browser' como argumento
 
