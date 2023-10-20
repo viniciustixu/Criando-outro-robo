@@ -171,7 +171,6 @@ async function run() {
     for (let i = 0; i < numIterations; i++) {
       await main(); // Execute o código principal
       gitAutoCommitAndPush('Meu commit automático');
-      await page.waitForTimeout(15000);
 
     }
   } catch (error) {
