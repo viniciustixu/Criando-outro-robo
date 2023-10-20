@@ -47,6 +47,7 @@ async function main() {
   }
   return productData;
 }
+
 async function scrapeTimeRemaining(browser, productData, poolSize) {
   const chunks = chunkArray(productData, poolSize);
   for (const chunk of chunks) {
@@ -69,6 +70,7 @@ async function scrapeTimeRemaining(browser, productData, poolSize) {
     await Promise.all(promises);
   }
 }
+
 function chunkArray(array, chunkSize) {
   const chunks = [];
   for (let i = 0; i < array.length; i += chunkSize) {
@@ -76,6 +78,7 @@ function chunkArray(array, chunkSize) {
   }
   return chunks;
 }
+
 async function main() {
   const browser = await puppeteer.launch({ headless: false });
   const poolSize = 10;
@@ -110,6 +113,7 @@ async function main() {
   }
   await browser.close();
 }
+
 function ordenarPorMelhorPrecoPorMinuto(dadosStr) {
   const linhas = dadosStr.split('\n');
   const dados = [];
@@ -132,6 +136,7 @@ function ordenarPorMelhorPrecoPorMinuto(dadosStr) {
   fs.writeFileSync('melhores.html', html);
   console.log('Arquivo "melhores.html" gerado com sucesso.');
 }
+
 function gerarHTML(dados) {
   let html = `
     <html>
