@@ -1,38 +1,33 @@
-const fs = require('fs');
 const { exec } = require('child_process');
 
-// Função para salvar todos os arquivos no diretório
-const saveFiles = () => {
-  fs.readdirSync('./').forEach(file => {
-    if (fs.lstatSync(file).isFile()) {
-      // Você pode personalizar isso para incluir ou excluir tipos de arquivo específicos, se necessário.
-      exec(`git add ${file}`, (err, stdout, stderr) => {
-        if (err) {
-          console.error(`Erro ao adicionar ${file}: ${err}`);
-        }
-      });
-    }
-  });
-};
-
 // Função para automatizar o commit e push
-const commitAndPush = () => {
-  saveFiles();
-  exec('git commit -m "commit e push automático"', (err, stdout, stderr) => {
-    if (err) {
-      console.error(`Erro ao fazer o commit: ${err}`);
+const gitAutoCommitAndPush = (commitMessage) => {
+  // Execute os comandos git para adicionar, fazer commit e fazer push
+  exec('git add .', (addErr) => {
+    if (addErr) {
+      console.error(`Erro ao adicionar alterações: ${addErr}`);
       return;
     }
-    exec('git push', (err, stdout, stderr) => {
-      if (err) {
-        console.error(`Erro ao fazer o push: ${err}`);
+
+    exec(`git commit -m "${commitMessage}"`, (commitErr) => {
+      if (commitErr) {
+        console.error(`Erro ao fazer commit: ${commitErr}`);
         return;
       }
-      console.log('Commit e push realizados com sucesso!');
+
+      exec('git push', (pushErr) => {
+        if (pushErr) {
+          console.error(`Erro ao fazer push: ${pushErr}`);
+          return;
+        }
+
+        console.log('Commit e push realizados com sucesso!');
+      });
     });
   });
 };
 
-module.exports = commitAndPush;
+// Exporte a função para que ela possa ser importada em outros arquivos
+module.exports = gitAutoCommitAndPush;
 
-commitAndPush();
+gitAutoCommitAndPush()
