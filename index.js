@@ -1,6 +1,8 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
-const commitAndPush = require('./autoCommitPush');
+const gitAutoCommitAndPush = require('./autoCommitPush');
+
+
 
 async function clickLoadMore(page, selector, times) {
   try {
@@ -161,5 +163,5 @@ function gerarHTML(dados) {
 }
 
 
-commitAndPush();
+gitAutoCommitAndPush('Meu commit automático');
 main();
