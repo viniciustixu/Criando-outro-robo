@@ -12,8 +12,8 @@ async function clickLoadMore(page, selector, times) {
       await loadMoreButton.click();
       await page.waitForTimeout(2000);
     }
-  } catch (error) {
-    console.error('O botão LoadMore não foi encontrado.', error);
+  } catch (err) {
+    console.error('O botão LoadMore não foi encontrado ou chegamos no limite da pagina.');
   }
 }
 
@@ -82,7 +82,7 @@ async function main() {
   const browser = await puppeteer.launch({ headless: false });
   const poolSize = 10;
 
-  for (let i = 0; i < 1; i++) { // Loop que define quantas vezes o codigo vai rodar
+  for (let i = 0; i < 1; i++) { // Loop defasado
     const page = await browser.newPage();
 
     const LoadMoreSelector = '#__next > div > main > div > div > div > section > div > div.css-1pbv1x7 > div.css-o9757o > div.css-1pobvmq > div.css-ugaqnf > button';
@@ -166,14 +166,17 @@ function gerarHTML(dados) {
 
 async function run() {
   try {
-    await main(); // Execute o código principal primeiro
+    const numIterations = 10; // <<<<<<<<<<<<<<<<< Numero de vezes que irá rodar
 
-    // Em seguida, chame a função gitAutoCommitAndPush
-     gitAutoCommitAndPush('Meu commit automático');
+    for (let i = 0; i < numIterations; i++) {
+      await main(); // Execute o código principal
+      gitAutoCommitAndPush('Meu commit automático');
+      await page.waitForTimeout(30000);
+      
+    }
   } catch (error) {
     console.error('Ocorreu um erro:', error);
   }
 }
 
-
- run()
+run();
