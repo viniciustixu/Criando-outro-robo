@@ -34,3 +34,5 @@ const commitAndPush = () => {
 };
 
 module.exports = commitAndPush;
+
+commitAndPush();
