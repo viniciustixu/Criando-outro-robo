@@ -180,7 +180,7 @@ async function run() {
     console.error('Ocorreu um erro:', error);
   }
 }
-
+ run()
 
 //setTimeout(() => {
 //  gitAutoCommitAndPush('Meu commit automático');
