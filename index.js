@@ -1,21 +1,20 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
-const simpleGit = require('simple-git');
-
 async function clickLoadMore(page, selector, times) {
-  await page.waitForSelector(selector, { timeout: 4000 });
-  const loadMoreButton = await page.$(selector);
-
-  for (let i = 0; i < times; i++) {
-    await loadMoreButton.click();
-    await page.waitForTimeout(2000);
+  try {
+    await page.waitForSelector(selector, { timeout: 4000 });
+    const loadMoreButton = await page.$(selector);
+    for (let i = 0; i < times; i++) {
+      await loadMoreButton.click();
+      await page.waitForTimeout(2000);
+    }
+  } catch (error) {
+    console.error('O botão LoadMore não foi encontrado.', error);
   }
 }
-
 async function scrapeProductData(page) {
   const productData = [];
   const productDivs = await page.$$('.css-rj8yxg');
-
   for (const div of productDivs) {
     const infoIcon = await div.$('img[aria-haspopup="dialog"]');
     if (infoIcon) {
@@ -26,7 +25,7 @@ async function scrapeProductData(page) {
         if (priceElement) {
           const precoDoItem = await priceElement.evaluate(el => el.textContent);
           const idDoItem = textValue.replace('#', '');
-          if (!precoDoItem.includes(',')) {
+          if (!precoDoItem.includes(',')) { // Verifica se o preço não contém vírgula
             productData.push({
               id: idDoItem,
               price: precoDoItem,
@@ -36,13 +35,20 @@ async function scrapeProductData(page) {
       }
     }
   }
+    
+          
+            
+    
 
+
+    
+async function main() {
+  
+  }
   return productData;
 }
-
 async function scrapeTimeRemaining(browser, productData, poolSize) {
   const chunks = chunkArray(productData, poolSize);
-
   for (const chunk of chunks) {
     const promises = chunk.map(async (product) => {
       const link = `https://openloot.com/items/BT0/Hourglass_Common/issue/${product.id}`;
@@ -56,16 +62,13 @@ async function scrapeTimeRemaining(browser, productData, poolSize) {
         return '';
       });
       await newPage.close();
-
       if (tempo !== '0.00') {
         product.time = tempo;
       }
     });
-
     await Promise.all(promises);
   }
 }
-
 function chunkArray(array, chunkSize) {
   const chunks = [];
   for (let i = 0; i < array.length; i += chunkSize) {
@@ -73,75 +76,62 @@ function chunkArray(array, chunkSize) {
   }
   return chunks;
 }
-
-async function addLastUpdateToHTML(html) {
-  const currentTime = new Date();
-  const formattedTimeUTC = `${currentTime.getUTCHours()}:${currentTime.getUTCMinutes()} (UTC)`;
-  return html.replace('<body>', `<body><p>Last update: ${formattedTimeUTC}</p>`);
-}
-
 async function main() {
   const browser = await puppeteer.launch({ headless: false });
   const poolSize = 10;
-  const page = await browser.newPage();
 
-  try {
+  for (let i = 0; i < 1; i++) { // Loop que define quantas vezes o codigo vai rodar
+    const page = await browser.newPage();
+
     const LoadMoreSelector = '#__next > div > main > div > div > div > section > div > div.css-1pbv1x7 > div.css-o9757o > div.css-1pobvmq > div.css-ugaqnf > button';
     await page.goto('https://openloot.com/items/BT0/Hourglass_Common');
     await page.waitForNavigation({ waitUntil: 'load' });
     await page.waitForTimeout(5000);
-    await clickLoadMore(page, LoadMoreSelector, 0);
+    await clickLoadMore(page, LoadMoreSelector, 100); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     const productData = await scrapeProductData(page);
-    await scrapeTimeRemaining(browser, productData, poolSize);
+    await page.close();
 
+    
+          
+            
+    
+
+          
+
+    
+    
+  
+    await scrapeTimeRemaining(browser, productData, poolSize);
     const filteredProductData = productData.filter((product) => product.price && product.time && product.time !== '0.00');
     filteredProductData.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
-
     const dadosStr = filteredProductData.map((product) => `${product.id}\t${product.price}\tLink\t${product.time}`).join('\n');
-    const html = ordenarPorMelhorPrecoPorMinuto(dadosStr);
-
-    const updatedHTML = await addLastUpdateToHTML(html);
-
-    const git = simpleGit();
-    await git.add('.');
-    await git.commit('Atualização automática da lista');
-    await git.push('origin', 'master');
-
-    fs.writeFileSync('melhores.html', updatedHTML);
-  } catch (error) {
-    console.error('Ocorreu um erro durante a execução:', error);
-  } finally {
-    await browser.close();
+    ordenarPorMelhorPrecoPorMinuto(dadosStr);
   }
+  await browser.close();
 }
-
 function ordenarPorMelhorPrecoPorMinuto(dadosStr) {
   const linhas = dadosStr.split('\n');
   const dados = [];
-
   linhas.forEach(function (linha) {
     const partes = linha.split('\t');
     if (partes.length === 4) {
       const id = parseInt(partes[0]);
       const precoStr = partes[1];
       const tempoStr = partes[3];
-
       const preco = parseFloat(precoStr.replace('$', '').trim());
       const tempo = parseFloat(tempoStr.trim());
       const valorPorMinuto = preco / tempo;
       dados.push([id, preco, tempo, valorPorMinuto]);
     }
   });
-
   dados.sort(function (a, b) {
     return a[3].toString().localeCompare(b[3].toString());
   });
-
   const html = gerarHTML(dados);
-  return html;
+  fs.writeFileSync('melhores.html', html);
+  console.log('Arquivo "melhores.html" gerado com sucesso.');
 }
-
 function gerarHTML(dados) {
   let html = `
     <html>
@@ -157,10 +147,8 @@ function gerarHTML(dados) {
             <th>Tempo</th>
             <th>Valor por Minuto</th>
           </tr>`;
-
   dados.forEach(function (entrada) {
     const link = `https://openloot.com/items/BT0/Hourglass_Common/issue/${entrada[0]}`;
-
     html += `
           <tr>
             <td><a href="${link}" target="_blank">${entrada[0]}</a></td>
@@ -169,24 +157,11 @@ function gerarHTML(dados) {
             <td>${entrada[3]}</td>
           </tr>`;
   });
-
   html += `
         </table>
       </body>
     </html>`;
-
   return html;
 }
 
-async function runScript() {
-  for (let i = 0; i < 1; i++) {
-    await main();
-  }
-
-  const git = simpleGit();
-  await git.add('.');
-  await git.commit('Atualização automática da lista');
-  await git.push('https://github.com/viniciustixu/SnipeTime', 'main');
-}
-
-runScript();
+main()
