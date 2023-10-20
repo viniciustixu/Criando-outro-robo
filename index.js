@@ -166,12 +166,17 @@ function gerarHTML(dados) {
 
 async function run() {
   try {
-    const numIterations = 10; // <<<<<<<<<<<<<<<<< Numero de vezes que irá rodar
+    const numIterations = 10; // Número de vezes que irá rodar
+    const delayBetweenIterations = 15000; // 30 segundos em milissegundos
 
     for (let i = 0; i < numIterations; i++) {
       await main(); // Execute o código principal
       gitAutoCommitAndPush('Meu commit automático');
 
+      if (i < numIterations - 1) {
+        // Aguarde o atraso entre iterações
+        await new Promise(resolve => setTimeout(resolve, delayBetweenIterations));
+      }
     }
   } catch (error) {
     console.error('Ocorreu um erro:', error);
