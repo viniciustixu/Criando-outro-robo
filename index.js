@@ -165,8 +165,11 @@ function gerarHTML(dados) {
 
 
 
+
+
+main();
+
+
 setTimeout(() => {
   gitAutoCommitAndPush('Meu commit automático');
 }, 5000);
-
-main();
