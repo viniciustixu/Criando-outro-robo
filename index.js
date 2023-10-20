@@ -90,7 +90,7 @@ async function main() {
     await page.goto('https://openloot.com/items/BT0/Hourglass_Common');
     await page.waitForNavigation({ waitUntil: 'load' });
     await page.waitForTimeout(5000);
-    await clickLoadMore(page, LoadMoreSelector, 5);
+    await clickLoadMore(page, LoadMoreSelector, 0);
 
     const productData = await scrapeProductData(page);
     await scrapeTimeRemaining(browser, productData, poolSize);
