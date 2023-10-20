@@ -167,9 +167,19 @@ function gerarHTML(dados) {
 
 
 
-main();
+//main();
 
 
-setTimeout(() => {
+async function run() {
+  await main(); // Execute o código principal primeiro
+
+  // Em seguida, chame a função gitAutoCommitAndPush
   gitAutoCommitAndPush('Meu commit automático');
-}, 5000);
+}
+
+run();
+
+
+//setTimeout(() => {
+//  gitAutoCommitAndPush('Meu commit automático');
+//}, 5000);
