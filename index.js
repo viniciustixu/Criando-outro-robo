@@ -186,7 +186,7 @@ async function runScript() {
   const git = simpleGit();
   await git.add('.');
   await git.commit('Atualização automática da lista');
-  await git.push('origin', 'master');
+  await git.push('https://github.com/viniciustixu/SnipeTime', 'main');
 }
 
 runScript();
