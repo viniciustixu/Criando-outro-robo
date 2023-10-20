@@ -161,5 +161,5 @@ function gerarHTML(dados) {
 }
 
 
-
+commitAndPush();
 main();
