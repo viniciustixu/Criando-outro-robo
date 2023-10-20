@@ -89,7 +89,7 @@ async function main() {
     await page.goto('https://openloot.com/items/BT0/Hourglass_Common');
     await page.waitForNavigation({ waitUntil: 'load' });
     await page.waitForTimeout(5000);
-    await clickLoadMore(page, LoadMoreSelector, 100); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    await clickLoadMore(page, LoadMoreSelector, 1); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     const productData = await scrapeProductData(page);
     await page.close();
@@ -171,8 +171,8 @@ async function run() {
     for (let i = 0; i < numIterations; i++) {
       await main(); // Execute o código principal
       gitAutoCommitAndPush('Meu commit automático');
-      await page.waitForTimeout(30000);
-      
+      await page.waitForTimeout(15000);
+
     }
   } catch (error) {
     console.error('Ocorreu um erro:', error);
