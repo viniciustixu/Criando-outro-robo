@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
-const { exec } = require('child_process');
+const commitAndPush = require('./autoCommitPush');
 
 async function clickLoadMore(page, selector, times) {
   try {
@@ -38,7 +38,7 @@ async function scrapeProductData(page) {
       }
     }
   }
-   
+    
 async function main() {
   
   }
@@ -91,6 +91,9 @@ async function main() {
 
     const productData = await scrapeProductData(page);
     await page.close();
+
+    
+
   
     await scrapeTimeRemaining(browser, productData, poolSize);
     const filteredProductData = productData.filter((product) => product.price && product.time && product.time !== '0.00');
@@ -116,6 +119,7 @@ function ordenarPorMelhorPrecoPorMinuto(dadosStr) {
       dados.push([id, preco, tempo, valorPorMinuto]);
     }
   });
+
   dados.sort(function (a, b) {
     return a[3].toString().localeCompare(b[3].toString());
   });
@@ -156,4 +160,6 @@ function gerarHTML(dados) {
   return html;
 }
 
-main()
+
+
+main();
