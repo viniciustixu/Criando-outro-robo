@@ -172,10 +172,10 @@ function gerarHTML(dados) {
 
 async function run() {
   try {
-    await main(); // Execute o código principal primeiro
+     main(); // Execute o código principal primeiro
 
     // Em seguida, chame a função gitAutoCommitAndPush
-    gitAutoCommitAndPush('Meu commit automático');
+    await gitAutoCommitAndPush('Meu commit automático');
   } catch (error) {
     console.error('Ocorreu um erro:', error);
   }
