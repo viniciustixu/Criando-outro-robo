@@ -177,6 +177,9 @@ const saveFiles = () => {
   });
 };
 
+
+
+
 // Função para automatizar o commit e push
 const commitAndPush = () => {
   saveFiles();
