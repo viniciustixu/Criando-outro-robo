@@ -131,6 +131,9 @@ function ordenarPorMelhorPrecoPorMinuto(dadosStr) {
 }
 
 function gerarHTML(dados) {
+  const now = new Date(); // Obtém a data e hora atual
+  const lastUpdate = `last update: ${now.getUTCHours()}:${String(now.getUTCMinutes()).padStart(2, '0')} (UTC)`;
+
   let html = `
     <html>
       <head>
@@ -138,6 +141,7 @@ function gerarHTML(dados) {
       </head>
       <body>
         <h1>Dados Ordenados por Melhor Preço por Minuto</h1>
+        <div>${lastUpdate}</div>
         <table>
           <tr>
             <th>ID</th>
@@ -145,6 +149,7 @@ function gerarHTML(dados) {
             <th>Tempo</th>
             <th>Valor por Minuto</th>
           </tr>`;
+
   dados.forEach(function (entrada) {
     const link = `https://openloot.com/items/BT0/Hourglass_Common/issue/${entrada[0]}`;
     html += `
@@ -155,6 +160,7 @@ function gerarHTML(dados) {
             <td>${entrada[3]}</td>
           </tr>`;
   });
+
   html += `
         </table>
       </body>
@@ -164,10 +170,11 @@ function gerarHTML(dados) {
 
 
 
+
 async function run() {
   try {
     const numIterations = 10; // Número de vezes que irá rodar
-    const delayBetweenIterations = 15000; // 30 segundos em milissegundos
+    const delayBetweenIterations = 30000; // 30 segundos em milissegundos
 
     for (let i = 0; i < numIterations; i++) {
       await main(); // Execute o código principal
