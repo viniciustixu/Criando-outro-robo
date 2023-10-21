@@ -13,7 +13,7 @@ async function clickLoadMore(page, selector, times) {
       await page.waitForTimeout(2000);
     }
   } catch (err) {
-    console.error('O botão LoadMore não foi encontrado ou chegamos no limite da pagina.');
+    console.error('Todas as ampulhetas foram escaneadas, iniciando conversão');
   }
 }
 
@@ -174,14 +174,14 @@ function gerarHTML(dados) {
 async function run() {
   try {
     const numIterations = 100; // Número de vezes que irá rodar
-    const delayBetweenIterations = 30000; // 30 segundos em milissegundos
+    const delayBetweenIterations = 30000; 
 
     for (let i = 0; i < numIterations; i++) {
-      await main(); // Execute o código principal
+      await main(); 
       gitAutoCommitAndPush('Meu commit automático');
 
       if (i < numIterations - 1) {
-        // Aguarde o atraso entre iterações
+        
         await new Promise(resolve => setTimeout(resolve, delayBetweenIterations));
       }
     }
