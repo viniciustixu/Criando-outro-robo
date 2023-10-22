@@ -31,17 +31,6 @@ async function scrapeProductData(page) {
           const precoDoItem = await priceElement.evaluate(el => el.textContent);
           const idDoItem = textValue.replace('#', '');
           if (!precoDoItem.includes(',')) { // Verifica se o preço não contém vírgula
-
-
-
-            const pageContent = await page.content();
-            if (pageContent.includes('A timeout occurred')) {
-              console.error('A timeout occurred on the page. Restarting the application...');
-              return run();
-            }
-
-
-
             productData.push({
               id: idDoItem,
               price: precoDoItem,
@@ -185,21 +174,25 @@ function gerarHTML(dados) {
 
 
 async function run() {
-  try {
-    const numIterations = 100; // Número de vezes que irá rodar
-    const delayBetweenIterations = 30000; 
+  const numIterations = 100; // Número de vezes que irá rodar
+  const delayBetweenIterations = 30000;
 
-    for (let i = 0; i < numIterations; i++) {
-      await main(); 
+  for (let i = 0; i < numIterations; i++) {
+    try {
+      await main();
       gitAutoCommitAndPush('Meu commit automático');
+    } catch (error) {
+      console.error('Erro na iteração', i + 1, error);
 
-      if (i < numIterations - 1) {
-        
-        await new Promise(resolve => setTimeout(resolve, delayBetweenIterations));
-      }
+      // Fecha o navegador em caso de erro e continua para a próxima iteração
+      const browser = await puppeteer.launch();
+      await browser.close();
+      continue;
     }
-  } catch (error) {
-    console.error('Ocorreu um erro:', error);
+
+    if (i < numIterations - 1) {
+      await new Promise(resolve => setTimeout(resolve, delayBetweenIterations));
+    }
   }
 }
 
