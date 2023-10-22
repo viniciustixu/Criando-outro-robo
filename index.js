@@ -140,6 +140,7 @@ function gerarHTML(dados) {
         <title>SNIPE TIME</title>
         <link rel="stylesheet" href="a.css">
         <link rel="stylesheet" href="melhores.css">
+        <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
       </head>
       <body>
         <div class="imagem">
