@@ -1,0 +1,6 @@
+body {
+  -webkit-user-select: none; /* Para navegadores baseados em WebKit, como o Google Chrome e o Safari */
+  -moz-user-select: none; /* Para navegadores baseados no mecanismo Gecko, como o Mozilla Firefox */
+  -ms-user-select: none; /* Para o Internet Explorer/Edge */
+  user-select: none; /* Padrão */
+}

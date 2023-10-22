@@ -89,7 +89,7 @@ async function main() {
     await page.goto('https://openloot.com/items/BT0/Hourglass_Common');
     await page.waitForNavigation({ waitUntil: 'load' });
     await page.waitForTimeout(5000);
-    await clickLoadMore(page, LoadMoreSelector, 100); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    await clickLoadMore(page, LoadMoreSelector, 1); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     const productData = await scrapeProductData(page);
     await page.close();
@@ -142,6 +142,7 @@ function gerarHTML(dados) {
       <body>
         <h1>Dados Ordenados por Melhor Preço por Minuto</h1>
         <div>${lastUpdate}</div>
+        <script src="s.js"></script>
         <table>
           <tr>
             <th>ID</th>
@@ -173,7 +174,7 @@ function gerarHTML(dados) {
 
 async function run() {
   try {
-    const numIterations = 100; // Número de vezes que irá rodar
+    const numIterations = 1; // Número de vezes que irá rodar
     const delayBetweenIterations = 30000; 
 
     for (let i = 0; i < numIterations; i++) {

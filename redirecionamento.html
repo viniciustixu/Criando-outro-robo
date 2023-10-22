@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecionamento</title>
+    <link rel="stylesheet" href="a.css">
+</head>
+<body>
+    <h1>Redirecionamento</h1>
+    <p>Sua sessão expirou.</p>
+
+    <script>
+        document.oncontextmenu = function() {
+          return false;
+        }
+
+        setTimeout(function() {
+            window.location.href = "login.html";
+        }, 3000); // Redireciona para a página de login após 3 segundos
+    </script>
+</body>
+</html>
