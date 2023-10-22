@@ -1,0 +1,73 @@
+/* Reset de estilos padrão do navegador */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilos gerais da página */
+body {
+  font-family: Arial, sans-serif;
+  background-image: url('img.jpg');
+  background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro e um pouco transparente */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #fff;
+  display: flex;
+  flex-direction: column; /* Alinhar elementos verticalmente */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  text-align: center; /* Centralizar o conteúdo horizontalmente */
+}
+
+h1 {
+  /*background-color: #3498db;*/
+  color: #fff;
+  padding: 20px;
+}
+
+#loginForm {
+  background-color: #111;
+  width: 300px;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; /* Espaço entre o título e o formulário */
+  opacity: 0.95;
+}
+
+/* Estilos para os campos de entrada e rótulos */
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #fff;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #333;
+  color: #fff;
+}
+
+button[type="submit"] {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+button[type="submit"]:hover {
+  background-color: #2980b9;
+}
