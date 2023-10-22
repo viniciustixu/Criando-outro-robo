@@ -1,4 +1,10 @@
         // Array com pares de login e senha válidos
+
+
+        document.oncontextmenu = function() {
+          return false;
+        }
+
         var usuarios = [
           { login: "usuario1", senha: "senha1" },
           { login: "usuario2", senha: "senha2" },

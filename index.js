@@ -138,6 +138,7 @@ function gerarHTML(dados) {
     <html>
       <head>
         <title>Dados Ordenados</title>
+        <link rel="stylesheet" href="a.css">
       </head>
       <body>
         <h1>Dados Ordenados por Melhor Preço por Minuto</h1>
