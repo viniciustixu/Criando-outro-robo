@@ -185,7 +185,7 @@ async function run() {
       console.error('Erro na iteração', i + 1, error);
 
       // Fecha o navegador em caso de erro e continua para a próxima iteração
-      const browser = await puppeteer.launch();
+     // const browser = await puppeteer.launch();
       await browser.close();
       continue;
     }
