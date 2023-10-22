@@ -162,7 +162,7 @@ function gerarHTML(dados) {
           <tr>
             <td><a href="${link}" target="_blank">${entrada[0]}</a></td>
             <td>$ ${entrada[1]}</td>
-            <td>${entrada[2]}   (${(Math.floor(entrada[2] / 60) + "h" + (entrada[2] % 60 < 10 ? "0" : "") + entrada[2] % 60 + "m")})</td>
+            <td>${entrada[2]}   (${Math.floor(entrada[2])}h${entrada[2] % 60 < 10 ? "0" : ""}${entrada[2] % 60}m)</td>
             <td>${entrada[3].toFixed(5)} ¢</td>
           </tr>`;
   });
