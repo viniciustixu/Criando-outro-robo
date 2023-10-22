@@ -1,0 +1,36 @@
+/* Reset de estilos padrão do navegador */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter;
+}
+
+/* Estilos gerais da página */
+body {
+  background-image: url('img.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  text-align: center;
+  color: white;
+}
+
+img {
+  text-align: center;
+  max-width: 500px;
+}
+
+div {
+  padding-top: 100px;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+  color: white;
+  padding-bottom: 20px;
+}
+
+h1 {
+  padding-top: 100px;
+  padding-bottom: 20px;
+}
