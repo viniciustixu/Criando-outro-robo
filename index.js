@@ -159,7 +159,7 @@ function gerarHTML(dados) {
           <tr>
             <td><a href="${link}" target="_blank">${entrada[0]}</a></td>
             <td>$ ${entrada[1]}</td>
-            <td>${entrada[2].toFixed(5)} (${(entrada[2] / 60).toFixed(2)}h)</td>
+            <td>${entrada[2]} (${(entrada[2] / 60).toFixed(2)}h)</td>
             <td>${entrada[3].toFixed(5)} ¢</td>
           </tr>`;
   });

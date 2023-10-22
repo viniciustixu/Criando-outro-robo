@@ -8,7 +8,7 @@
 
 /* Estilos gerais da página */
 body {
-  background-image: url('img.jpg'); /* Substitua pelo caminho da sua imagem de fundo */
+  /*background-image: url('img.jpg');  Substitua pelo caminho da sua imagem de fundo */
   background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro e um pouco transparente */
   background-size: cover;
   background-position: center;
