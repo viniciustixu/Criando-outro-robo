@@ -6,10 +6,9 @@ document.oncontextmenu = function() {
 if (!isLoggedIn) {
     window.location.href = "redirecionamento.html";
 } else {
-    // Agende o redirecionamento após 10 segundos
     setTimeout(function () {
         // Limpe o cookie e redirecione
         document.cookie = "isLoggedIn=; max-age=0; path=/";
         window.location.href = "index.html";
-    }, 10000); // 10 segundos em milissegundos
+    }, 3600000); // 5 horas em milissegundos
 }
