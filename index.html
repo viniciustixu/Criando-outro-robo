@@ -17,17 +17,6 @@
         <button type="submit">Entrar</button>
     </form>
 
-    <script>
-        document.oncontextmenu = function() {
-          return false;
-        }
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            // Realize a autenticação no cliente (semelhante ao que você já fez)
-            // Configure um cookie para expirar após 10 segundos
-            document.cookie = "isLoggedIn=true; max-age=10; path=/";
-            window.location.href = "melhores.html";
-        });
-    </script>
+    <script src="a.js"></script>
 </body>
 </html>

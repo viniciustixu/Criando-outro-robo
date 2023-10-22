@@ -4,7 +4,7 @@ document.oncontextmenu = function() {
 }
 
 if (!isLoggedIn) {
-    window.location.href = "index.html";
+    window.location.href = "redirecionamento.html";
 } else {
     // Agende o redirecionamento após 10 segundos
     setTimeout(function () {
