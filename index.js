@@ -141,15 +141,15 @@ function gerarHTML(dados) {
         <link rel="stylesheet" href="a.css">
       </head>
       <body>
-        <h1>Dados Ordenados por Melhor Preço por Minuto</h1>
+        <h1>SNIPE TIME</h1>
         <div>${lastUpdate}</div>
         <script src="s.js"></script>
         <table>
           <tr>
             <th>ID</th>
-            <th>Preço</th>
-            <th>Tempo</th>
-            <th>Valor por Minuto</th>
+            <th>Price</th>
+            <th>Time remaining</th>
+            <th>Price per minute</th>
           </tr>`;
 
   dados.forEach(function (entrada) {
