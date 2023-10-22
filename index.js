@@ -185,7 +185,7 @@ async function run() {
       console.error('Erro na iteração', i + 1, error);
 
       // Fecha o navegador em caso de erro e continua para a próxima iteração
-     // const browser = await puppeteer.launch();
+      const browser = await puppeteer.launch();
       await browser.close();
       continue;
     }
@@ -197,30 +197,3 @@ async function run() {
 }
 
 run();
-
-
-/*
-
-async function run() {
-  try {
-    const numIterations = 100; // Número de vezes que irá rodar
-    const delayBetweenIterations = 30000; 
-
-    for (let i = 0; i < numIterations; i++) {
-      await main(); 
-      gitAutoCommitAndPush('Meu commit automático');
-
-      if (i < numIterations - 1) {
-        
-        await new Promise(resolve => setTimeout(resolve, delayBetweenIterations));
-      }
-    }
-  } catch (error) {
-    console.error('Erro: a Timeout occurred');
-    
-  }
-}
-
-run();
-
-*/
