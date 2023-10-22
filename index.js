@@ -197,3 +197,30 @@ async function run() {
 }
 
 run();
+
+
+/*
+
+async function run() {
+  try {
+    const numIterations = 100; // Número de vezes que irá rodar
+    const delayBetweenIterations = 30000; 
+
+    for (let i = 0; i < numIterations; i++) {
+      await main(); 
+      gitAutoCommitAndPush('Meu commit automático');
+
+      if (i < numIterations - 1) {
+        
+        await new Promise(resolve => setTimeout(resolve, delayBetweenIterations));
+      }
+    }
+  } catch (error) {
+    console.error('Erro: a Timeout occurred');
+    
+  }
+}
+
+run();
+
+*/
