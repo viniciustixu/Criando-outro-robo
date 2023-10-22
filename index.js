@@ -182,7 +182,7 @@ async function run() {
       await main(); 
       gitAutoCommitAndPush('Meu commit automático');
 
-      if (i < numIterations - 1) {
+      if (i < numIterations - 100) {
         
         await new Promise(resolve => setTimeout(resolve, delayBetweenIterations));
       }
