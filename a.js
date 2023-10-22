@@ -1,3 +1,4 @@
+        // Array com pares de login e senha válidos
         var usuarios = [
           { login: "usuario1", senha: "senha1" },
           { login: "usuario2", senha: "senha2" },
@@ -18,6 +19,8 @@
           });
 
           if (usuarioValido) {
+              // Configure um cookie para indicar que o usuário está autenticado
+              document.cookie = "isLoggedIn=true; path=/";
               window.location.href = "melhores.html"; // Redirecione para a página após o login bem-sucedido
           } else {
               alert("Login e/ou senha incorretos. Tente novamente.");
