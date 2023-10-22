@@ -29,4 +29,3 @@ const gitAutoCommitAndPush = (commitMessage) => {
 
 // Exporte a função para que ela possa ser importada em outros arquivos
 module.exports = gitAutoCommitAndPush;
-
