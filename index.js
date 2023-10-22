@@ -142,7 +142,9 @@ function gerarHTML(dados) {
         <link rel="stylesheet" href="melhores.css">
       </head>
       <body>
-        <h1>SNIPE TIME</h1>
+        <div class="imagem">
+          <img src="SnipeTime_white.png" alt="SnipeTime">
+        </div>
         <div>${lastUpdate}</div>
         <script src="s.js"></script>
         <table>
