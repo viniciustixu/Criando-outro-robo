@@ -31,6 +31,17 @@ async function scrapeProductData(page) {
           const precoDoItem = await priceElement.evaluate(el => el.textContent);
           const idDoItem = textValue.replace('#', '');
           if (!precoDoItem.includes(',')) { // Verifica se o preço não contém vírgula
+
+
+
+            const pageContent = await page.content();
+            if (pageContent.includes('A timeout occurred')) {
+              console.error('A timeout occurred on the page. Restarting the application...');
+              return run();
+            }
+
+
+
             productData.push({
               id: idDoItem,
               price: precoDoItem,
