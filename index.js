@@ -137,7 +137,7 @@ function gerarHTML(dados) {
   let html = `
     <html>
       <head>
-        <title>asdasdasd</title>
+        <title>SNIPE TIME</title>
         <link rel="stylesheet" href="a.css">
       </head>
       <body>
