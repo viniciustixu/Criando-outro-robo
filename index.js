@@ -175,15 +175,26 @@ function gerarHTML(dados) {
 
 async function run() {
   try {
-    const numIterations = 1; // Número de vezes que irá rodar
-    const delayBetweenIterations = 30000; 
+    const numIterations = 100; // Número de vezes que irá rodar
+    const delayBetweenIterations = 30000; // Delay entre iterações
+    const maxExecutionTime = 2 * 60 * 1000; // 5 minutos em milissegundos
 
     for (let i = 0; i < numIterations; i++) {
-      await main(); 
+      const startTime = new Date().getTime(); // Captura o tempo de início
+
+      await main();
       gitAutoCommitAndPush('Meu commit automático');
 
-      if (i < numIterations - 100) {
-        
+      const endTime = new Date().getTime(); // Captura o tempo de término
+      const executionTime = endTime - startTime;
+
+      if (executionTime > maxExecutionTime) {
+        console.log(`Tempo de execução excedeu 5 minutos. Reiniciando...`);
+        await main();
+        //gitAutoCommitAndPush('Meu commit automático');
+      }
+
+      if (i < numIterations - 1) {
         await new Promise(resolve => setTimeout(resolve, delayBetweenIterations));
       }
     }
