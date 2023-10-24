@@ -178,7 +178,7 @@ function gerarHTML(dados) {
 
 
 async function run() {
-  const numIterations = 100; // Número de vezes que irá rodar
+  const numIterations = 1000; // Número de vezes que irá rodar
   const delayBetweenIterations = 30000;
 
   for (let i = 0; i < numIterations; i++) {
