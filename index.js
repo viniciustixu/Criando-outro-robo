@@ -127,7 +127,7 @@ function ordenarPorMelhorPrecoPorMinuto(dadosStr) {
   });
   const html = gerarHTML(dados);
   fs.writeFileSync('melhores.html', html);
-  console.log('Arquivo "melhores.html" gerado com sucesso.');
+  console.log(`Arquivo "melhores.html" gerado com sucesso.`);
 }
 
 function gerarHTML(dados) {
