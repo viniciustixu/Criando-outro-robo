@@ -40,9 +40,9 @@ async function scrapeProductData(page) {
       }
     }
   }
-    
-async function main() {
-  
+
+  async function main() {
+
   }
   return productData;
 }
@@ -94,9 +94,9 @@ async function main() {
     const productData = await scrapeProductData(page);
     await page.close();
 
-    
 
-  
+
+
     await scrapeTimeRemaining(browser, productData, poolSize);
     const filteredProductData = productData.filter((product) => product.price && product.time && product.time !== '0.00');
     filteredProductData.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
@@ -133,7 +133,7 @@ function ordenarPorMelhorPrecoPorMinuto(dadosStr) {
 function gerarHTML(dados) {
   const now = new Date(); // Obtém a data e hora atual
   const lastUpdate = `last update: ${now.getUTCHours()}:${String(now.getUTCMinutes()).padStart(2, '0')} (UTC)`;
-
+  //<div>${lastUpdate}</div>
   let html = `
     <html>
       <head>
@@ -146,7 +146,6 @@ function gerarHTML(dados) {
         <div class="imagem">
           <img src="SnipeTime_white.png" alt="SnipeTime">
         </div>
-        <div>${lastUpdate}</div>
         <script src="s.js"></script>
         <table>
           <tr>
