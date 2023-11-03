@@ -185,7 +185,7 @@ async function run() {
       await main();
       gitAutoCommitAndPush('Meu commit automático');
     } catch (error) {
-      console.error('Erro na iteração', i + 1, error);
+      console.error('Erro na iteração', i + 1);
 
       // Fecha o navegador em caso de erro e continua para a próxima iteração
       const browser = await puppeteer.launch();
