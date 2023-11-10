@@ -12,7 +12,6 @@ body {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  
 }
 
 img {
@@ -27,6 +26,7 @@ div {
   text-align: center;
   color: white;
   padding-bottom: 20px;
+  line-height: 30px;
 }
 
 table {
@@ -42,7 +42,7 @@ table {
 }
 
 table tr:first-child {
-  background-color: #222222;; /* Cor de fundo vermelha para o primeiro <tr> */
+  background-color: #222222; /* Cor de fundo vermelha para o primeiro <tr> */
   color: white;
 }
 
@@ -50,10 +50,12 @@ tbody {
   border-spacing: 0px;
 }
 
-table, th, td {
+table,
+th,
+td {
   border-spacing: 0px;
   text-align: center;
-  border-bottom: 1px solid #E5E5E5;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 /*
