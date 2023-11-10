@@ -133,7 +133,7 @@ function ordenarPorMelhorPrecoPorMinuto(dadosStr) {
 function gerarHTML(dados) {
   const now = new Date(); // Obtém a data e hora atual
   const lastUpdate = `last update: ${now.getUTCHours()}:${String(now.getUTCMinutes()).padStart(2, '0')} (UTC)`;
-  // <div>${lastUpdate}</div>
+
   let html = `
     <html>
       <head>
@@ -146,7 +146,12 @@ function gerarHTML(dados) {
         <div class="imagem">
           <img src="SnipeTime_white.png" alt="SnipeTime">
         </div>
-        
+        <div>
+          <p>Hey there!</p>
+          <p>Just wanted to give you a heads up that this site will be taking a bow on November 20th.</p>
+          <p>Big thanks to all you awesome users who've been part of the journey so far!</p>
+          <p>On a different note, if you're on the lookout for a web developer, I've got your back. Hit me up at vinicipkt@live.com.</p>
+        </div>
         <script src="s.js"></script>
         <table>
           <tr>
